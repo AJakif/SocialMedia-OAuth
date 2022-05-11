@@ -1,0 +1,47 @@
+﻿@model SocialBOL.Authentication
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Login</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>
+                @if (ViewBag.Error != null)
+                {
+                    <span class="text-end alert alert-danger">@ViewBag.Error</span>
+                    <br />
+                    <br />
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label">User Name</label><span style="color:red">*</span>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label><span style="color:red">*</span>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="login" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <a class="btn btn-primary" asp-controller="Account" asp-action="Google">Google</a>
+        <a class="btn btn-primary" asp-controller="Account" asp-action="Facebook">Facebook</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
