@@ -134,6 +134,13 @@ namespace SocialDAL
 
                     comm.CommandText = sql;
                 }
+                if (provider == "Twitter")
+                {
+                    sql += " INSERT INTO [dbo].[Login] ([status],[enrollmentDate],[twitterId]) ";
+                    sql += $" VALUES('{A.Status}',getDate(),'{A.TwitterId}') ";
+
+                    comm.CommandText = sql;
+                }
                 conn.Open();
 
                 result = comm.ExecuteNonQuery();
@@ -186,6 +193,13 @@ namespace SocialDAL
 
                     comm.CommandText = sql;
                 }
+                if (provider == "Twitter")
+                {
+                    sql += " INSERT INTO [dbo].[Login] ([OID],[status][enrollmentDate],[email1],[twitterId]) ";
+                    sql += $" VALUES('{A.OID}','{A.Status}',getDate(),'{A.Email1}','{A.TwitterId}') ";
+
+                    comm.CommandText = sql;
+                }
                 conn.Open();
 
                 result = comm.ExecuteNonQuery();
@@ -234,6 +248,14 @@ namespace SocialDAL
                 if (provider == "Facebook")
                 {
                     sql += $" UPDATE [dbo].[Login] SET [facebookId] = '{A.FacebookId}'";
+
+                    sql += $" WHERE[email1] = '{A.Email1}' ";
+
+                    comm.CommandText = sql;
+                }
+                if (provider == "Twitter")
+                {
+                    sql += $" UPDATE [dbo].[Login] SET [twitterId] = '{A.TwitterId}'";
 
                     sql += $" WHERE[email1] = '{A.Email1}' ";
 
@@ -292,6 +314,15 @@ namespace SocialDAL
 
                     comm.CommandText = sql;
                     comm.Parameters.AddWithValue("@facebookID", ID);
+                    comm.Parameters.AddWithValue("@email1", Email);
+                }
+                if (provider == "Twitter")
+                {
+                    sql += " select * from  Login ";
+                    sql += " where twitterID = @twitterID and email1 = @email1 ";
+
+                    comm.CommandText = sql;
+                    comm.Parameters.AddWithValue("@twitterID", ID);
                     comm.Parameters.AddWithValue("@email1", Email);
                 }
                 conn.Open();

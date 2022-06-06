@@ -6,8 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ITfoxtec.Identity.Saml2" Version="4.8.2" />
+    <PackageReference Include="ITfoxtec.Identity.Saml2.Mvc" Version="4.8.2" />
+    <PackageReference Include="ITfoxtec.Identity.Saml2.MvcCore" Version="4.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.16" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="5.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="5.0.17" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.13" />

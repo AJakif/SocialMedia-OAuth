@@ -12,6 +12,7 @@ namespace SocialBOL
         public string Password { get; set; }
         public string GoogleId { get; set; }
         public string FacebookId { get; set; }
+        public string TwitterId { get; set; }
         public string LoginType { get; set; }
         public string Status { get; set; }
         public string FirstName { get; set; }
