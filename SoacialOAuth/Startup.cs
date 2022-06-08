@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Nest;
 using SoacialOAuth.Data;
 using System;
 using System.Collections.Generic;
@@ -114,7 +115,7 @@ namespace SoacialOAuth
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseSaml2();
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -128,6 +129,12 @@ namespace SoacialOAuth
                     name: "home",
                     pattern: "/",
                     defaults: new { controller = "Home", action = "Index", });
+                
+
+                endpoints.MapControllerRoute(
+                    name: "octa",
+                    pattern: "Auth/AssertionConsumerService",
+                    defaults: new { controller = "Account", action = "AssertionConsumerService", });
             });
         }
     }

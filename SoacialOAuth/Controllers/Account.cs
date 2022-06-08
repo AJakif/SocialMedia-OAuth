@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using ITfoxtec.Identity.Saml2;
+using ITfoxtec.Identity.Saml2.MvcCore;
+using ITfoxtec.Identity.Saml2.Schemas;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -7,10 +10,12 @@ using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using SocialBOL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -18,11 +23,15 @@ namespace SoacialOAuth.Controllers
 {
     public class Account : Controller
     {
+        const string relayStateReturnUrl = "ReturnUrl";
         private readonly IConfiguration _config;
+        private readonly Saml2Configuration _Sconfig;
+        
 
-        public Account(IConfiguration config)
+        public Account(IConfiguration config, IOptions<Saml2Configuration> configAccessor)
         {
             _config = config;
+           _Sconfig = configAccessor.Value;
         }
 
         [HttpGet]
@@ -30,6 +39,33 @@ namespace SoacialOAuth.Controllers
         {
             return View();
         }
+
+
+        [Route("saml2")]
+        public IActionResult Saml2(string returnUrl = null)
+        {
+            var binding = new Saml2RedirectBinding();
+            binding.SetRelayStateQuery(new Dictionary<string, string> { { relayStateReturnUrl, returnUrl ?? Url.Content("~/") } });
+
+            return binding.Bind(new Saml2AuthnRequest(_Sconfig)).ToActionResult();
+        }
+
+
+        public async Task<IActionResult> AssertionConsumerService()
+        {
+            var binding = new Saml2PostBinding();
+            var saml2AuthnResponse = new Saml2AuthnResponse(_Sconfig);
+
+            binding.ReadSamlResponse(Request.ToGenericHttpRequest(), saml2AuthnResponse);
+            if (saml2AuthnResponse.Status != Saml2StatusCodes.Success)
+            {
+                throw new AuthenticationException($"SAML Response status: {saml2AuthnResponse.Status}");
+            }
+            return Redirect("/");
+        }
+
+
+
 
 
         [Route("facebook-login")]
